@@ -1,7 +1,8 @@
 (defproject guestbook "0.1.0-SNAPSHOT"
 
-  :description "FIXME: write description"
-  :url "http://example.com/FIXME"
+  :description "Chapter 1"
+  :url "http://localhost:3000" 
+  :license "none"
 
   :dependencies [[ch.qos.logback/logback-classic "1.2.3"]
                  [cheshire "5.10.0"]
