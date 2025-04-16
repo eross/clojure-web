@@ -6,9 +6,9 @@
   [x]
   (println x "Hello, World!"))
 
-(selmer/render "<h1>Hello {{name}}!</h1>" {:name "World"})
+(selmer/render-file "hello.html" {:name "World"})
 
 (defn -main
   "Main entry point for the application."
   [& args]
-  (foo "Hello, World!"))
+  (selmer/render-file "hello.html" {:name "World"}))
