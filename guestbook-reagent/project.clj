@@ -1,8 +1,15 @@
+;---
+; Excerpted from "Web Development with Clojure, Third Edition",
+; published by The Pragmatic Bookshelf.
+; Copyrights apply to this code. It may not be used to create training material,
+; courses, books, articles, and the like. Contact us if you are in doubt.
+; We make no guarantees that this code is fit for any purpose.
+; Visit http://www.pragmaticprogrammer.com/titles/dswdcloj3 for more book information.
+;---
 (defproject guestbook "0.1.0-SNAPSHOT"
 
-  :description "Chapter 1"
-  :url "http://localhost:3000" 
-  :license "none"
+  :description "FIXME: write description"
+  :url "http://example.com/FIXME"
 
   :dependencies [[ch.qos.logback/logback-classic "1.2.3"]
                  [cheshire "5.10.0"]
@@ -23,6 +30,11 @@
                  [mount "0.1.16"]
                  [nrepl "0.8.3"]
                  [org.clojure/clojure "1.10.1"]
+                 ;
+                 [cljs-ajax "0.8.1"]
+                 [org.clojure/clojurescript "1.10.764" :scope "provided"]
+                 [reagent "1.0.0"]
+                 ;
                  [org.clojure/tools.cli "1.0.194"]
                  [org.clojure/tools.logging "1.1.0"]
                  [org.webjars.npm/bulma "0.9.1"]
@@ -31,35 +43,36 @@
                  [ring-webjars "0.2.0"]
                  [ring/ring-core "1.8.2"]
                  [ring/ring-defaults "0.3.2"]
-                 [selmer "1.12.31"]
-                 [org.clojure/clojurescript "1.10.764" :scope "provided"]]
+                 [selmer "1.12.31"]]
 
   :min-lein-version "2.0.0"
-  
+
   :source-paths ["src/clj"]
   :test-paths ["test/clj"]
-  :resource-paths ["resources"]
+  ;
+  :resource-paths ["resources" "target/cljsbuild"]
   :target-path "target/%s/"
   :main ^:skip-aot guestbook.core
 
   :plugins [[lein-cljsbuild "1.1.8"]]
-  
+
   :cljsbuild
-  {:builds 
+  {:builds
    {:app {:source-paths ["src/cljs"]
-          :compiler {:main guestbook.core
-                     :output-to "target/cljsbuild/public/js/app.js"
+          :compiler {:output-to "target/cljsbuild/public/js/app.js"
                      :output-dir "target/cljsbuild/public/js/out"
+                     :main "guestbook.core"
                      :asset-path "/js/out"
                      :optimizations :none
                      :source-map true
                      :pretty-print true}}}}
+
   :clean-targets
   ^{:protect false}
   [:target-path
    [:cljsbuild :builds :app :compiler :output-dir]
    [:cljsbuild :builds :app :compiler :output-to]]
-  
+  ;
 
   :profiles
   {:uberjar {:omit-source true
