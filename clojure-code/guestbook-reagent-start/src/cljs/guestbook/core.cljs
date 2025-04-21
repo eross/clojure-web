@@ -11,4 +11,8 @@
             [reagent.dom :as dom]))
 
 
-(dom/render [home] (.getElementById js/document "content"))
+;(dom/render [home] (.getElementById js/document "content"))
+(dom/render
+ [:h1 "Hello, World!"]
+ (.getElementById js/document "content"))
+
