@@ -13,6 +13,6 @@
 
 ;(dom/render [home] (.getElementById js/document "content"))
 (dom/render
- [:h1 "Hello, World!"]
+ [:div#hello.content [:h1 "Hello, Auto!"]]
  (.getElementById js/document "content"))
 
