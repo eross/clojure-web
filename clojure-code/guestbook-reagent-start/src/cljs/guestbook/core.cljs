@@ -10,12 +10,67 @@
   (:require [reagent.core :as r]
             [reagent.dom :as dom]))
 
+;; (defn message-form []
+;;   (let [fields (r/atom {})]
+;;     (fn []
+;;       [:div
+;;        [:div.field
+;;         [:label.label {:for :name} "Name"]
+;;         [:input.input
+;;          {:type :text
+;;           :name :name
+;;           :on-change #(swap! fields
+;;                              assoc :name (-> % .-target .-value))
+;;           :value (:name @fields)}]]
+;;        [:div.field
+;;         [:label.label {:for :message} "Message"]
+;;         [:textarea.textarea
+;;          {:name :message
+;;           :value (:message @fields)
+;;           :on-change #(swap! fields
+;;                              assoc :message (-> % .-target .-value))}]]
+;;        [:input.button.is-primary
+;;         {:type :submit
+;;          :value "comment"}]])))
+
+(defn message-form []
+  (let [fields (r/atom {})]
+    (fn []
+      [:div
+       [:div.field
+        [:label.label {:for :name} "Name"]
+        [:input.input
+         {:type :text
+          :name :name
+          :on-change #(swap! fields
+                             assoc :name (-> % .-target .-value))
+          :value (:name @fields)}]]
+       [:div.field
+        [:label.label {:for :message} "Message"]
+        [:textarea.textarea
+         {:name :message
+          :value (:message @fields)
+          :on-change #(swap! fields
+                             assoc :message (-> % .-target .-value))}]]
+       [:input.button.is-primary
+        {:type :submit
+         :value "comment"}]])))
+
+(defn home []
+  [:div.content>div.columns.is-centered>div.column.is-two-thirds
+   [:div.content>div.columns
+    [message-form]]])
+
+;; (defn home []
+;;   [:div.content>div.columns.is-centered>div.column.is-two-thirds
+;;    [:div.content>div.columns
+;;     "Welcome to the Guestbook!"]])
+
+
 
 ;(dom/render [home] (.getElementById js/document "content"))
 (dom/render
- [:div
- [:div#hello.content [:h1 "Hello, Auto!"]]
-  [:div#hello.content [:h1 "Hello, Auto 2!"]]
-  ]
+[home]
  (.getElementById js/document "content"))
+
 
