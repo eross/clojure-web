@@ -13,6 +13,9 @@
 
 ;(dom/render [home] (.getElementById js/document "content"))
 (dom/render
+ [:div
  [:div#hello.content [:h1 "Hello, Auto!"]]
+  [:div#hello.content [:h1 "Hello, Auto 2!"]]
+  ]
  (.getElementById js/document "content"))
 
