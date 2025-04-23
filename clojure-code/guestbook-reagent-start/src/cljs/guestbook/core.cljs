@@ -32,7 +32,9 @@
                              assoc :message (-> % .-target .-value))}]]
        [:input.button.is-primary
         {:type :submit
-         :value "comment"}]])))
+         :value "comment"}]
+       [:p "Name: "  (:name @fields)]
+       [:p "Message: " (:message @fields)]])))
 
 (defn home []
   [:div.content>div.columns.is-centered>div.column.is-two-thirds
