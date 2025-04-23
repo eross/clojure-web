@@ -8,8 +8,14 @@
 ;---
 (ns guestbook.core
   (:require [reagent.core :as r]
-            [reagent.dom :as dom]))
-
+            [reagent.dom :as dom]
+            [ajax.core :refer [GET POST]]))
+      
+(defn send-message! [fields]
+  (POST "/message"
+      {:params @fields
+       :handler #(.log js/console (str "response" %))
+       :error-handler #(.error js/console (str "error:" %))}))
 
 (defn message-form []
   (let [fields (r/atom {})]
@@ -31,10 +37,10 @@
           :on-change #(swap! fields
                              assoc :message (-> % .-target .-value))}]]
        [:input.button.is-primary
-        {:type :submit
-         :value "comment"}]
-       [:p "Name: "  (:name @fields)]
-       [:p "Message: " (:message @fields)]])))
+        {:type :submit 
+         :on-click #(send-message! fields)
+         :value "comment"}]])))
+ 
 
 (defn home []
   [:div.content>div.columns.is-centered>div.column.is-two-thirds
