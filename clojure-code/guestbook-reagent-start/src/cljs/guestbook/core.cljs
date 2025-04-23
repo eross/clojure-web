@@ -13,7 +13,10 @@
       
 (defn send-message! [fields]
   (POST "/message"
-      {:params @fields
+      {:format :json
+       :headers {"Accept" "application/transit+json"
+                 "x-csrf-token" (.-value(.getElementById js/document "token"))}
+       :params @fields
        :handler #(.log js/console (str "response" %))
        :error-handler #(.error js/console (str "error:" %))}))
 
