@@ -33,6 +33,21 @@
   (when-let [error (id @errors)]
     [:div.notification.is-danger (string/join error)]))
 
+(defn message-list [messages]
+  (println messages)
+  [:ul.messages
+   (for [{:keys [timestamp message name]} @messages]
+     ^{:key timestamp}
+     [:li
+      [:time (.toLocaleString timestamp)]
+      [:p message]
+      [:p " - " name]])])
+
+(defn get-messages [messages]
+  (GET "/messages"
+    {:headers {"Accept" "application/transit+json"}
+     :handler #(reset! messages (:messages %))}))
+
 
 (defn message-form []
   (let [fields (r/atom {})
@@ -66,15 +81,15 @@
  
 
 (defn home []
-  [:div.content>div.columns.is-centered>div.column.is-two-thirds
-   [:div.content>div.columns
-    [message-form]]])
-
-;; (defn home []
-;;   [:div.content>div.columns.is-centered>div.column.is-two-thirds
-;;    [:div.content>div.columns
-;;     "Welcome to the Guestbook!"]])
-
+  (let [messages (r/atom nil)]
+    (get-messages messages)
+    (fn []
+      [:div.content>div.columns.is-centered>div.column.is-two-thirds 
+       [:div.content>div.columns
+        [:h3 "Messages"]
+        [message-list messages]]
+       [:div.columns>div.column
+        [message-form]]])))
 
 
 ;(dom/render [home] (.getElementById js/document "content"))
