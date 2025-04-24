@@ -50,9 +50,11 @@
       (db/save-message! params)
       (response/ok {:status :ok})
       (catch Exception e
-        (response/internal-server-error
-         {:errors {:server-error ["Failed to save message!"]}})))))
-;
+        (->
+         (println "Error saving message:" (.getMessage e))
+         (response/internal-server-error
+          {:errors {:server-error ["Failed to save message!"]}}))))))
+  
 
 (defn about-page [request]
   (layout/render
