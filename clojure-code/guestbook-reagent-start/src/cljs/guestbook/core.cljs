@@ -13,7 +13,7 @@
             [clojure.string :as string]
             [guestbook.validation :refer [validate-message]]))
       
-(defn send-message! [fields errors]
+(defn send-message! [fields errors messages]
   (if-let [validate-errors (validate-message @fields)]
     (reset! errors validate-errors)
     (POST "/message"
@@ -21,9 +21,8 @@
        :headers {"Accept" "application/transit+json"
                  "x-csrf-token" (.-value (.getElementById js/document "token"))}
        :params @fields
-       :handler (fn [r]
-                  (.log js/console (str "response:" r))
-                  (reset! errors nil))
+       :handler (fn [_]
+                 (swap! messages conj (assoc @fields :timestamp (js/Date.))))
        :error-handler (fn [e]
                         (.log js/console (str e))
                         (reset! errors (-> e :response :errors)))})))
@@ -49,7 +48,7 @@
      :handler #(reset! messages (:messages %))}))
 
 
-(defn message-form []
+(defn message-form [messages]
   (let [fields (r/atom {})
         errors (r/atom {})]
     (fn []
@@ -76,7 +75,7 @@
                              assoc :message (-> % .-target .-value))}]]
        [:input.button.is-primary
         {:type :submit 
-         :on-click #(send-message! fields errors)
+         :on-click #(send-message! fields errors messages)
          :value "comment"}]])))
  
 
@@ -89,8 +88,7 @@
         [:h3 "Messages"]
         [message-list messages]]
        [:div.columns>div.column
-        [message-form]]])))
-
+        [message-form messages]]])))
 
 ;(dom/render [home] (.getElementById js/document "content"))
 (dom/render
