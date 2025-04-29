@@ -67,9 +67,12 @@
 
 ;
 (rf/reg-event-db
+ :messages/set
  :message/add
- (fn [db [_ message]]
-   (update db :messages/list conj message)))
+ (fn [db [_ messages]]
+  (-> db 
+      (assoc :messages/loading? false 
+             :messages/list messages))))
 
 (defn send-message! [fields errors]
   (if-let [validation-errors (validate-message @fields)]
@@ -130,15 +133,10 @@
     (rf/dispatch [:app/initialize])
     (get-messages)
     (fn []
-      [:div.content>div.columns.is-centered>div.column.is-two-thirds
-       (if @(rf/subscribe [:messages/loading?])
-         [:h3 "Loading Messages..."]
-         [:div
-          [:div.columns>div.column
-           [:h3 "Messages"]
-           [message-list messages]]
-          [:div.columns>div.column
-           [message-form]]])])))
-;
+      (if @(rf/subscribe [:messages/loading?])
+        [:div>div.row>div.span12>h3
+         "Loading messages..."]
+        ))))
+
 
 (dom/render [home] (.getElementById js/document "content"))
